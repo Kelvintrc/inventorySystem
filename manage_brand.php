@@ -51,7 +51,7 @@ if (!isset($_SESSION["userid"])) {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="get_category">
+        <tbody id="get_brand">
           <!--<tr>
             <td>1</td>
             <td>Cow Feeds</td>

@@ -72,29 +72,36 @@ if (isset($_POST["manageCategory"])) {
 	$rows = $result["rows"];
 	$pagination = $result["pagination"];
 	if (count($rows) > 0) {
-		$n = 0;
+		$n = (($_POST["pageno"] - 1) * 5)+1;
 		foreach ($rows as $row) {
 			?>
              
           <tr>
-            <td><?php echo ++$n; ?></td>
+            <td><?php echo $n; ?></td>
             <td><?php echo $row["category"]; ?></td>
             <td><?php echo $row["parent"]; ?></td>
             <td>
               <a href="#" class="btn btn-success btn-sm">Active</a>
             </td>
             <td>
-              <a href="#" class="btn btn-danger btn-sm">Delete</a>
-              <a href="#" class="btn btn-info btn-sm">Edit</a>
+              <a href="#" did = "<?php echo $row['cid']; ?>" class="btn btn-danger btn-sm del_cat">Delete</a>
+              <a href="#" eid = "<?php echo $row['cid']; ?>" class="btn btn-info btn-sm edit_cat">Edit</a>
             </td>
           </tr>
              
 			<?php
+			$n++;
 		}
 		?>
          <tr><td colspan="5"><?php echo $pagination; ?></td></tr>
 		<?php
 		exit();
 	}
+}
+
+if (isset($_POST["deleteCategory"])) {
+	$m = new Manage();
+	$result = $m->deleteRecord("categories","cid",$_POST["id"]);
+	echo $result;
 }
 ?>
