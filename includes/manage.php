@@ -19,7 +19,9 @@ class Manage
 		$a = $this->pagination($this->con,$table,$pno,5);
 		if ($table == "categories") {
 			$sql = "SELECT p.category_name as category, p.cid as cid, c.category_name as parent, p.status FROM categories p LEFT JOIN categories c ON p.parent_cat=c.cid ".$a["limit"];
-		}
+		}else{
+      $sql = "SELECT * FROM ".$table." ".$a["limit"];
+    }
 		$result = $this->con->query($sql) or die($this->con->error);
 		$rows = array();
 		if ($result->num_rows > 0) {
@@ -88,7 +90,7 @@ public function deleteRecord($table,$pk,$id){
            }
        }
     }else{
-        $this->con->prepare("DELETE FROM ".$table." WHERE ".$pk." = ?");
+        $pre_stmt = $this->con->prepare("DELETE FROM ".$table." WHERE ".$pk." = ?");
         $pre_stmt->bind_param("i",$id);
         $result = $pre_stmt->execute() or die($this->con->error);
            if ($result) {
@@ -97,6 +99,35 @@ public function deleteRecord($table,$pk,$id){
        }
  }
 
+ public function getSingleRecord($table,$pk,$id){
+        $pre_stmt = $this->con->prepare("SELECT * FROM ".$table." WHERE ".$pk." = ? LIMIT 1");
+        $pre_stmt->bind_param("i",$id);
+        $pre_stmt->execute() or die($this->con->error);
+        $result = $pre_stmt->get_result();
+        if ($result->num_rows == 1) {
+          $row = $result->fetch_assoc();
+        }
+        return $row;
+ }
+ public function update_record($table,$where,$fields){
+        $sql = "";
+        $condition = "";
+         foreach ($where as $key => $value) {
+         // id = '5' AND m_name = 'something'
+        $condition .= $key . "='" . $value . "' AND ";
+        }
+        $condition = substr($condition, 0, -5);
+         foreach ($fields as $key => $value) {
+         //UPDATE table SET m_name = '' , qty = '' WHERE id = '';
+        $sql .= $key . "='".$value."', ";
+        }
+        $sql = substr($sql, 0,-2);
+        $sql = "UPDATE ".$table." SET ".$sql." WHERE ".$condition;
+         if(mysqli_query($this->con,$sql)){
+         return "UPDATED";
+      }
+    }
+
 }
 
 
@@ -104,4 +135,6 @@ public function deleteRecord($table,$pk,$id){
 //echo "<pre>";
 //print_r($obj->manageRecordWithPigination("categories",1));
 //echo $obj->deleteRecord("categories","cid",12);
+//print_r($obj->getSingleRecord("categories","cid",1));
+//echo $obj->update_record("categories",["cid"=>1],["parent_cat"=>0,"category_name"=>"cowF","status"=>1]);
 ?>

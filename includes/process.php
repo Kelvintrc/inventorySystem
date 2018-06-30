@@ -85,7 +85,7 @@ if (isset($_POST["manageCategory"])) {
             </td>
             <td>
               <a href="#" did = "<?php echo $row['cid']; ?>" class="btn btn-danger btn-sm del_cat">Delete</a>
-              <a href="#" eid = "<?php echo $row['cid']; ?>" class="btn btn-info btn-sm edit_cat">Edit</a>
+              <a href="#" eid = "<?php echo $row['cid']; ?>" class="btn btn-info btn-sm edit_cat" data-toggle="modal" data-target="#form_category">Edit</a>
             </td>
           </tr>
              
@@ -99,9 +99,72 @@ if (isset($_POST["manageCategory"])) {
 	}
 }
 
+//Delete Category
 if (isset($_POST["deleteCategory"])) {
 	$m = new Manage();
 	$result = $m->deleteRecord("categories","cid",$_POST["id"]);
 	echo $result;
 }
+
+//update Category
+if (isset($_POST["updateCategory"])) {
+	$m = new Manage();
+	$result = $m->getSingleRecord("categories","cid",$_POST["id"]);
+	echo json_encode($result);
+	exit();
+}
+//update record after getting data
+if (isset($_POST["update_category"])) {
+   $m = new Manage();
+   $id = $_POST["cid"];
+   $name = $_POST["update_category"];
+   $parent = $_POST["parent_cat"];
+   $result = $m->update_record("categories",["cid"=>$id],["parent_cat"=>$parent,"category_name"=>$name,"status"=>1]);
+   echo $result;
+}
+
+//----------------------Brand----------------------------------
+//manage brand
+if (isset($_POST["manageBrand"])) {
+	$m = new Manage();
+	$result = $m->manageRecordWithPigination("brands",$_POST["pageno"]);
+	$rows = $result["rows"];
+	$pagination = $result["pagination"];
+	if (count($rows) > 0) {
+		$n = (($_POST["pageno"] - 1) * 5)+1;
+		foreach ($rows as $row) {
+			?>
+             
+          <tr>
+            <td><?php echo $n; ?></td>
+            <td><?php echo $row["brand_name"]; ?></td>
+            <td>
+              <a href="#" class="btn btn-success btn-sm">Active</a>
+            </td>
+            <td>
+              <a href="#" did = "<?php echo $row['cid']; ?>" class="btn btn-danger btn-sm del_brand">Delete</a>
+              <a href="#" eid = "<?php echo $row['cid']; ?>" class="btn btn-info btn-sm edit_brand" data-toggle="modal" data-target="#form_category">Edit</a>
+            </td>
+          </tr>
+             
+			<?php
+			$n++;
+		}
+		?>
+         <tr><td colspan="5"><?php echo $pagination; ?></td></tr>
+		<?php
+		exit();
+	}
+}
+
+//-------------------Brand---------------
+
+//Delete Category
+if (isset($_POST["deleteBrand"])) {
+	$m = new Manage();
+	$result = $m->deleteRecord("brands","bid",$_POST["id"]);
+	echo $result;
+}
+
+
 ?>

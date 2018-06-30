@@ -68,6 +68,11 @@ if (!isset($_SESSION["userid"])) {
         </tbody>
       </table>
    </div>
+
+   <?php
+     include_once("./templates/update_category.php");
+
+   ?>
    
 </body>
 </html>
