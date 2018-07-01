@@ -46,12 +46,17 @@ if (!isset($_SESSION["userid"])) {
         <thead>
           <tr>
             <th>#</th>
+            <th>Product</th>
+            <th>Category</th>
             <th>Brand</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Added Date</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="get_category">
+        <tbody id="get_product">
           <!--<tr>
             <td>1</td>
             <td>Cow Feeds</td>
@@ -65,6 +70,11 @@ if (!isset($_SESSION["userid"])) {
         </tbody>
       </table>
    </div>
+   
+   <?php
+     include_once("./templates/update_product.php");
+
+   ?>
    
 </body>
 </html>

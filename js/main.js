@@ -217,10 +217,12 @@ $("#product_form").on("submit",function(){
             data : $("#product_form").serialize(), 
             success : function(data){
                 if (data == "NEW_PRODUCT_ADDED"){
-                    $("#product_name").val();
-                    $("#product_qty").val();
                     alert("New Product Added Successfully..!");
+                    $("#product_name").val("");
                     $("#select_cat").val("");
+                    $("#select_brand").val("");
+                    $("#product_price").val("");
+                    $("#product_qty").val("");
                 }else{
                     console.log(data);
                     alert(data);
